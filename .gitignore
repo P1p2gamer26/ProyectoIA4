@@ -1,0 +1,44 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+.env/
+
+# Claude Code
+.claude/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# PyCharm / IDEs
+.idea/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Datos grandes (no subir al repo — descargar desde la fuente)
+data/raw/*.csv
+data/processed/*.csv
+
+# Resultados generados (se regeneran ejecutando los notebooks)
+results/eda/*.png
+results/confusion_matrices/*.png
+results/training/*.png
+results/*.png
+results/*.csv
