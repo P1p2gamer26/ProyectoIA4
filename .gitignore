@@ -4,10 +4,9 @@ venv/
 env/
 .env/
 
-# Carpetas ocultas de herramientas locales (excepto las necesarias)
+# Carpetas ocultas de herramientas locales (excepto el gitignore)
 .*
 !.gitignore
-!.venv/
 
 # Python cache
 __pycache__/
