@@ -32,9 +32,7 @@ desktop.ini
 *.tmp
 *.log
 
-# Datos grandes (no subir al repo — descargar desde la fuente)
-data/raw/*.csv
-data/processed/*.csv
+# Los datos SI se suben al repo (son públicos y necesarios para ejecutar los notebooks)
 
 # Resultados generados (se regeneran ejecutando los notebooks)
 results/eda/*.png
