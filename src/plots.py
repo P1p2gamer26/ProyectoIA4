@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import ConfusionMatrixDisplay
 from evaluation import get_confusion_matrix
+from paths import ensure_parent_dir
 
 
 def plot_confusion_matrix(y_test, y_pred, labels, title: str, save_path: str):
@@ -21,6 +22,7 @@ def plot_confusion_matrix(y_test, y_pred, labels, title: str, save_path: str):
     ax.set_ylabel("Real")
     ax.set_title(title)
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150)
     plt.close()
 
@@ -44,6 +46,7 @@ def plot_confusion_matrices_combined(preds: dict, y_test, labels, save_path: str
         ax.set_title(f"{nombre}\nAcc={acc:.4f} | F1={f1:.4f}", fontweight="bold")
 
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()
 
@@ -80,6 +83,7 @@ def plot_metrics_bar(results: dict, save_path: str):
                 f"{bar.get_height():.4f}", ha="center", va="bottom", fontsize=9)
 
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150)
     plt.close()
 
@@ -94,6 +98,7 @@ def plot_feature_importance(model, feature_names, save_path: str, top_n: int = 1
     ax.set_ylabel("Importancia")
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()
 
@@ -109,6 +114,7 @@ def plot_mlp_loss(mlp_model, save_path: str):
     ax.set_ylabel("Loss / Score")
     ax.legend()
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150)
     plt.close()
 
@@ -180,6 +186,7 @@ def plot_eda_combined(df, target_col: str, save_path: str):
         axes[1, 2].legend(fontsize=7)
 
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()
 
@@ -216,5 +223,6 @@ def plot_experiment_bars(df_rf, df_svm, df_mlp, save_path: str):
 
     plt.suptitle("Accuracy por configuración de hiperparámetros", fontsize=13, y=1.02)
     plt.tight_layout()
+    ensure_parent_dir(save_path)
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
     plt.close()

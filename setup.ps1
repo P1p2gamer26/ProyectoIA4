@@ -31,7 +31,12 @@ Write-Host "`n[3/3] Registrando kernel de Jupyter..." -ForegroundColor Yellow
 .venv\Scripts\python.exe -m ipykernel install --user --name proyectoIA4 --display-name "Python (ProyectoIA4)"
 
 Write-Host "`n=== Listo ===" -ForegroundColor Green
+New-Item -ItemType Directory -Force -Path results\eda, results\confusion_matrices, results\training, presentacion | Out-Null
+
 Write-Host "Abre VS Code, selecciona el kernel 'Python (ProyectoIA4)' y ejecuta los notebooks en orden:" -ForegroundColor Cyan
 Write-Host "  1. notebooks/01_eda_limpieza.ipynb"
-Write-Host "  2. notebooks/02_modelos.ipynb"
-Write-Host "  3. notebooks/03_experimento.ipynb"
+Write-Host "  2. notebooks/03_experimento.ipynb"
+Write-Host "  3. notebooks/02_modelos.ipynb  (opcional)"
+Write-Host ""
+Write-Host "O ejecuta el experimento completo:" -ForegroundColor Cyan
+Write-Host "  .venv\Scripts\python.exe scripts\run_experiment.py"

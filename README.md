@@ -9,26 +9,27 @@
 
 ¿Es posible predecir si una persona en Bogotá tendrá un **intento de suicidio** versus solo **ideación suicida**, basándose en sus factores de riesgo sociodemográficos y psicosociales?
 
-Este problema de clasificación binaria tiene relevancia clínica directa: un modelo predictivo puede apoyar a profesionales de salud mental como herramienta de screening temprano, permitiendo priorizar intervenciones en casos de mayor riesgo.
+Este problema de clasificación binaria tiene relevancia clínica directa: un modelo predictivo puede apoyar a profesionales de salud mental como herramienta de screening temprano.
 
 ---
 
 ## Dataset
 
 - **Fuente:** [Datos Abiertos Bogotá — Secretaría Distrital de Salud](https://datosabiertos.bogota.gov.co/dataset/tasa-de-suicidio-en-bogota-d-c)
-- **Registros:** ~254,000 casos individuales (2012–2026)
+- **Tipo:** repositorio público de datos abiertos (equivalente a un benchmark de salud pública; el enunciado sugiere Kaggle como ejemplo, no como requisito exclusivo).
+- **Registros:** ~254,000 casos (2012–2026)
 - **Target:** `clasificaciondelaconducta` → *Ideación suicida* / *Intento de Suicidio*
-- **Features principales:** edad, sexo, ciclo vital, localidad, nivel educativo, y factores de riesgo binarios (maltrato sexual, conflicto de pareja, problemas económicos, problemas laborales, etc.)
+- **Features:** edad, sexo, ciclo vital, localidad, nivel educativo, factores de riesgo binarios, etc.
 
 ---
 
 ## Técnicas aplicadas
 
-| Técnica | Implementación | Notas |
-|---------|---------------|-------|
-| Random Forest (RF) | `sklearn.ensemble.RandomForestClassifier` | Entrenado sobre dataset completo |
-| Support Vector Machine (SVM) | `sklearn.svm.SVC` | Entrenado sobre muestra estratificada de 15,000 registros (RBF escala O(n²)) |
-| Red Neuronal (MLP) | `sklearn.neural_network.MLPClassifier` | Entrenado sobre dataset completo |
+| Técnica | Implementación | Entrenamiento |
+|---------|---------------|---------------|
+| Random Forest (RF) | `sklearn.ensemble.RandomForestClassifier` | Train completo (~203k) |
+| Support Vector Machine (SVM) | `sklearn.svm.SVC` | Muestra estratificada 15,000 (costo O(n²)) |
+| Red Neuronal (MLP) | `sklearn.neural_network.MLPClassifier` | Train completo |
 
 ---
 
@@ -36,99 +37,100 @@ Este problema de clasificación binaria tiene relevancia clínica directa: un mo
 
 ```
 ProyectoIA4/
-│
-├── data/
-│   ├── raw/
-│   │   └── conducta_suicida_bogota.csv       # Dataset original sin modificar
-│   └── processed/
-│       └── datos_limpios.csv                 # Dataset tras limpieza y estandarización
-│
+├── data/raw/                    # CSV original
+├── data/processed/              # datos_limpios.csv
 ├── notebooks/
-│   ├── 01_eda_limpieza.ipynb                 # Análisis exploratorio y limpieza
-│   ├── 02_modelos.ipynb                      # Entrenamiento RF, SVM, MLP
-│   └── 03_experimento.ipynb                  # Experimento comparativo de hiperparámetros
-│
-├── src/
-│   ├── preprocessing.py                      # Carga, limpieza, encoding, split, escalado
-│   ├── evaluation.py                         # Métricas y matriz de confusión
-│   └── plots.py                              # Todas las funciones de visualización
-│
-├── results/
-│   ├── eda/                                  # Gráficas del análisis exploratorio
-│   ├── confusion_matrices/                   # Matrices de confusión por modelo
-│   ├── training/                             # Curva de pérdida del MLP
-│   ├── comparacion_modelos.png               # Barplot comparativo de métricas
-│   └── experiment_table.csv                  # Tabla consolidada del experimento
-│
+│   ├── 01_eda_limpieza.ipynb    # EDA, verificación y limpieza
+│   ├── 03_experimento.ipynb     # Experimento 2³ + mejores modelos + análisis
+│   └── 02_modelos.ipynb         # Entrenamiento con mejores HP del experimento
+├── src/                         # preprocessing, plots, experiment_analysis, …
+├── scripts/
+│   ├── run_experiment.py        # Ejecuta experimento completo desde terminal
+│   └── generate_ppt.py          # Genera plantilla PPT editable
+├── results/                     # Tablas, gráficas, matrices (generados al ejecutar)
+├── presentacion/                # Proyecto 4 - GX.pptx
 └── requirements.txt
 ```
 
 ---
 
-## Instalación y ejecución (desde cero)
+## Instalación
 
-### 0. Requisito previo — Python
-Necesitas tener Python instalado. Si no lo tienes:
-- Descárgalo desde **https://www.python.org/downloads/**
-- Durante la instalación marca **"Add Python to PATH"**
-- Cualquier versión 3.10+ funciona
-
-### 1. Clonar el repositorio
-```powershell
-git clone <url-del-repo>
-cd ProyectoIA4
+### macOS / Linux
+```bash
+chmod +x setup.sh
+./setup.sh
+source .venv/bin/activate
 ```
 
-### 2. Ejecutar el script de setup (una sola vez)
+### Windows (PowerShell)
 ```powershell
 .\setup.ps1
+.venv\Scripts\Activate.ps1
 ```
-Esto crea el entorno virtual `.venv`, instala automáticamente todo lo que está en `requirements.txt` y registra el kernel de Jupyter para VS Code.
 
-### 3. Abrir en VS Code
-```powershell
-code .
+---
+
+## Ejecución (orden recomendado)
+
+1. **`notebooks/01_eda_limpieza.ipynb`** — genera `data/processed/datos_limpios.csv`
+2. **`notebooks/03_experimento.ipynb`** — experimento factorial, tabla, análisis, matrices del **mejor modelo**
+3. **`notebooks/02_modelos.ipynb`** — (opcional) reentrena con `results/best_configs.json`
+
+**Alternativa rápida por terminal** (pasos 2 y 3 automatizados):
+```bash
+.venv/bin/python scripts/run_experiment.py
 ```
-- Abre cualquier notebook en `notebooks/`
-- Clic en el selector de kernel (arriba a la derecha) → **"Python (ProyectoIA4)"**
-- Ejecutar en orden — el `01` genera el CSV limpio que usan los demás:
-  1. `notebooks/01_eda_limpieza.ipynb`
-  2. `notebooks/02_modelos.ipynb`
-  3. `notebooks/03_experimento.ipynb`
 
 ---
 
 ## Diseño experimental
 
-Para cada técnica se seleccionaron **3 hiperparámetros** con **2 valores** cada uno (8 combinaciones por técnica, 24 runs totales):
+Para cada técnica: **3 hiperparámetros × 2 valores** → 8 configuraciones × 3 técnicas = **24 runs**.
 
 | Técnica | Hiperparámetro 1 | Hiperparámetro 2 | Hiperparámetro 3 |
 |---------|-----------------|-----------------|------------------|
-| RF | `n_estimators` [100, 300] | `max_depth` [5, 15] | `min_samples_split` [2, 10] |
-| SVM | `C` [0.1, 10] | `kernel` [rbf, poly] | `gamma` [scale, 0.01] |
-| MLP | `hidden_layer_sizes` [(50,), (100,100)] | `learning_rate_init` [0.001, 0.01] | `max_iter` [200, 500] |
+| RF | `n_estimators` [100, 200] | `max_depth` [10, 20] | `min_samples_split` [5, 10] |
+| SVM | `C` [1, 10] | `kernel` [rbf, poly] | `gamma` [scale, auto] |
+| MLP | `hidden_layer_sizes` [(100,50), (200,100)] | `activation` [relu, tanh] | `learning_rate_init` [0.001, 0.01] |
+
+Criterio de mejor modelo: **F1 ponderado** (adecuado para desbalance 73% / 27%).
+
+Salidas en `results/`:
+- `experiment_table.csv`
+- `analisis_comparativo.md`
+- `best_configs.json`
+- `confusion_matrices/cm_*_mejores.png`
+- `experimento_accuracy.png`
 
 ---
 
-## Resultados (resumen)
+## Presentación (PPT)
 
-Los resultados completos se encuentran en `results/experiment_table.csv` y en las matrices de confusión de `results/confusion_matrices/`.
+Generar plantilla editable (cambiar `--grupo` y nombres):
+
+```bash
+.venv/bin/python scripts/generate_ppt.py --grupo 4 --estudiantes "Ana Pérez\nLuis Gómez"
+```
+
+Archivo: `presentacion/Proyecto 4 - G4.pptx`  
+Completar con capturas de notebooks y gráficas de `results/`.  
+Entregar al buzón como **Proyecto 4 - GX** con comentario: Grupo X + nombres.
 
 ---
 
 ## Preprocesamiento
 
-1. Normalización de nombres de columnas (minúsculas, sin espacios)
-2. Eliminación de filas sin target
-3. Imputación de valores faltantes con mediana
-4. Codificación de variables categóricas con `LabelEncoder`
-5. Escalado con `StandardScaler` (requerido por SVM y MLP)
-6. Split 80/20 estratificado por clase
+1. Normalización de nombres de columnas
+2. Eliminación de duplicados y filas sin target
+3. Verificación de valores de target y outliers en edad
+4. Estandarización de nivel educativo e imputación de nulos
+5. Codificación `LabelEncoder` + imputación mediana
+6. `StandardScaler` para SVM/MLP
+7. Split 80/20 estratificado
 
 ---
 
 ## Dependencias
 
-```
-pandas · numpy · scikit-learn · matplotlib · seaborn · jupyter
-```
+`pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `jupyter`, `python-pptx`

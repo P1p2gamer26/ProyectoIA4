@@ -1,0 +1,26 @@
+{
+  "RF": {
+    "n_estimators": 200,
+    "max_depth": 20,
+    "min_samples_split": 10,
+    "accuracy": 0.7051,
+    "f1": 0.7115
+  },
+  "SVM": {
+    "C": 1.0,
+    "kernel": "poly",
+    "gamma": "scale",
+    "accuracy": 0.6718,
+    "f1": 0.6815
+  },
+  "MLP": {
+    "hidden_layer_sizes": [
+      100,
+      50
+    ],
+    "activation": "tanh",
+    "learning_rate_init": 0.001,
+    "accuracy": 0.7582,
+    "f1": 0.7168
+  }
+}

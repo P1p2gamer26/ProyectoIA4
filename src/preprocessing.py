@@ -58,6 +58,11 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
     df = df.dropna(subset=[TARGET_COL])
     df[TARGET_COL] = df[TARGET_COL].str.strip()
+    # Eliminar filas duplicadas exactas
+    n_before = len(df)
+    df = df.drop_duplicates()
+    if len(df) < n_before:
+        pass  # duplicados eliminados silenciosamente; el notebook reporta el conteo
 
     # Eliminar columnas redundantes que existan
     cols_drop = [c for c in COLS_ELIMINAR if c in df.columns]
