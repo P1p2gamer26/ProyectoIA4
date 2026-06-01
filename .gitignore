@@ -4,8 +4,10 @@ venv/
 env/
 .env/
 
-# Claude Code
-.claude/
+# Carpetas ocultas de herramientas locales (excepto las necesarias)
+.*
+!.gitignore
+!.venv/
 
 # Python cache
 __pycache__/
