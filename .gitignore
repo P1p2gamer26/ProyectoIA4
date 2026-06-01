@@ -35,9 +35,4 @@ desktop.ini
 
 # Los datos SI se suben al repo (son públicos y necesarios para ejecutar los notebooks)
 
-# Resultados generados (se regeneran ejecutando los notebooks)
-results/eda/*.png
-results/confusion_matrices/*.png
-results/training/*.png
-results/*.png
-results/*.csv
+# Resultados generados
