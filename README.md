@@ -54,20 +54,21 @@ ProyectoIA4/
 
 ---
 
-## Instalación
+## Instalación (automática)
 
-### macOS / Linux
-```bash
-chmod +x setup.sh
-./setup.sh
-source .venv/bin/activate
-```
+> **`git pull` no trae `.venv`** — en cada PC nuevo ejecuta **un solo comando** de abajo.  
+> Requiere **Python 3.10+** instalado (no sirve 3.7).
 
-### Windows (PowerShell)
-```powershell
-.\setup.ps1
-.venv\Scripts\Activate.ps1
-```
+| Sistema | Comando (elige uno) |
+|---------|---------------------|
+| **Windows** | Doble clic en `setup.bat` **o** `.\setup.ps1` **o** `py -3.11 scripts\bootstrap.py` |
+| **macOS / Linux** | `./setup.sh` **o** `python3 scripts/bootstrap.py` |
+| **Cursor / VS Code** | `Cmd/Ctrl+Shift+P` → **Tasks: Run Task** → **ProyectoIA4: Setup** |
+
+Eso crea `.venv`, instala librerías, registra el kernel **Python (ProyectoIA4)** y las carpetas `results/`.
+
+Luego en el notebook: kernel → **Python Environments** → **`.venv`** o **Python (ProyectoIA4)**.  
+Si no aparece: **Enter interpreter path** → `ProyectoIA4/.venv/Scripts/python.exe` (Windows) o `.venv/bin/python` (Mac).
 
 ---
 

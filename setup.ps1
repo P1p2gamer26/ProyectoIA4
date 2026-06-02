@@ -1,42 +1,15 @@
-# setup.ps1 — ejecutar una sola vez despues de git clone
-# Crea el entorno virtual, instala dependencias y registra el kernel de Jupyter
+# setup.ps1 — atajo Windows (llama a bootstrap.py)
+# También puedes hacer doble clic en setup.bat
 
 Write-Host "`n=== Setup ProyectoIA4 ===" -ForegroundColor Cyan
+Set-Location $PSScriptRoot
 
-# 0. Verificar que Python este instalado
-if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Host "`n[ERROR] Python no encontrado." -ForegroundColor Red
-    Write-Host "Descargalo desde: https://www.python.org/downloads/" -ForegroundColor Yellow
-    Write-Host "Asegurate de marcar 'Add Python to PATH' durante la instalacion." -ForegroundColor Yellow
-    exit 1
-}
-$pyVersion = python --version
-Write-Host "`nPython detectado: $pyVersion" -ForegroundColor Green
-
-# 1. Crear el venv si no existe
-if (-not (Test-Path ".venv")) {
-    Write-Host "`n[1/3] Creando entorno virtual..." -ForegroundColor Yellow
-    python -m venv .venv
-} else {
-    Write-Host "`n[1/3] Entorno virtual ya existe, saltando..." -ForegroundColor Green
+foreach ($try in @("py -3.12", "py -3.11", "py -3.10", "python")) {
+    try {
+        Invoke-Expression "$try scripts\bootstrap.py"
+        if ($LASTEXITCODE -eq 0) { exit 0 }
+    } catch { }
 }
 
-# 2. Instalar dependencias
-Write-Host "`n[2/3] Instalando dependencias..." -ForegroundColor Yellow
-.venv\Scripts\python.exe -m pip install --upgrade pip --quiet
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-
-# 3. Registrar el kernel para que VS Code lo detecte automaticamente
-Write-Host "`n[3/3] Registrando kernel de Jupyter..." -ForegroundColor Yellow
-.venv\Scripts\python.exe -m ipykernel install --user --name proyectoIA4 --display-name "Python (ProyectoIA4)"
-
-Write-Host "`n=== Listo ===" -ForegroundColor Green
-New-Item -ItemType Directory -Force -Path results\eda, results\confusion_matrices, results\training, presentacion | Out-Null
-
-Write-Host "Abre VS Code, selecciona el kernel 'Python (ProyectoIA4)' y ejecuta los notebooks en orden:" -ForegroundColor Cyan
-Write-Host "  1. notebooks/01_eda_limpieza.ipynb"
-Write-Host "  2. notebooks/03_experimento.ipynb"
-Write-Host "  3. notebooks/02_modelos.ipynb  (opcional)"
-Write-Host ""
-Write-Host "O ejecuta el experimento completo:" -ForegroundColor Cyan
-Write-Host "  .venv\Scripts\python.exe scripts\run_experiment.py"
+Write-Host "`n[ERROR] Ejecuta: py -3.11 scripts\bootstrap.py" -ForegroundColor Red
+exit 1
